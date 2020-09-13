@@ -36,7 +36,7 @@ Router.post("/", (req, res) => {
     (err, results, fields) => {
       if (!err) {
         results.forEach((element) => {
-          if (element.constructor == Array) res.send(element);
+          if (element.constructor === Array) res.send(element);
         });
       } else {
         console.log(err);
