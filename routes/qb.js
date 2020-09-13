@@ -74,4 +74,18 @@ Router.put("/", (req, res) => {
   );
 });
 
+Router.delete("/:id", (req, res) => {
+  mysqlConnection.query(
+    "DELETE FROM quarterback_rankings WHERE ID= ? ",
+    [req.params.id],
+    (err, results, fields) => {
+      if (!err) {
+        res.send("The selected quarterback has been successfully deleted.");
+      } else {
+        console.log(err);
+      }
+    }
+  );
+});
+
 module.exports = Router;
