@@ -4,15 +4,46 @@ const mysqlConnection = require("../utils/database");
 const Router = express.Router();
 
 Router.get("/", (req, res) => {
-  mysqlConnection.query("SELECT * FROM quarterback_rankings", (err, results, fields) => {
-    if (!err) {
-      res.send(results);
-    } else {
-      console.log(err);
+  mysqlConnection.query(
+    "SELECT * FROM quarterback_rankings",
+    (err, results, fields) => {
+      if (!err) {
+        res.send(results);
+      } else {
+        console.log(err);
+      }
     }
-  });
+  );
 });
 
+Router.post("/", (req, res) => {
+  let qb = req.body;
+  const sql =
+    "SET @ID = ?;SET @Name = ?;SET @Position = ?;SET @Team = ?;SET @OpposingTeam = ?;SET @JodySmith = ?;SET @EricMoody = ?;SET @JohnFerguson = ?;SET @FantasyData = ?; CALL Add_or_Update_QB(@ID, @Name, @Position, @Team, @OpposingTeam, @JodySmith, @EricMoody, @JohnFerguson, @FantasyData);";
+  mysqlConnection.query(
+    sql,
+    [
+      qb.ID,
+      qb.Name,
+      qb.Position,
+      qb.Team,
+      qb.OpposingTeam,
+      qb.JodySmith,
+      qb.EricMoody,
+      qb.JohnFerguson,
+      qb.FantasyData,
+    ],
+    (err, results, fields) => {
+      if (!err) {
+        results.forEach((element) => {
+          if (element.constructor == Array) res.send(element);
+        });
+      } else {
+        console.log(err);
+      }
+    }
+  );
+});
 
 
 module.exports = Router;
